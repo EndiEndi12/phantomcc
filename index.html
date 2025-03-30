@@ -22,6 +22,60 @@
             overflow-x: hidden;
         }
 
+        /* Loading animation */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Basic card styles */
+        .pricing-card {
+            background: rgba(20, 20, 20, 0.8);
+        }
+
+        /* Basic navigation links */
+        .nav-links a {
+            position: relative;
+        }
+
+        /* Basic hero section */
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         /* Particle container */
         #tsparticles {
             position: fixed;
@@ -132,16 +186,45 @@
 
         .cta-button {
             padding: 1rem 2rem;
-            background: linear-gradient(to right, #ff88bb, #ff99cc);
+            background: linear-gradient(45deg, #ff88bb, #ff99cc, #ff88bb);
+            background-size: 200% auto;
             color: #fff;
             border: none;
             border-radius: 50px;
             font-size: 1.2rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
             display: inline-block;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(255, 136, 187, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 136, 187, 0.6);
+        }
+
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .cta-button:hover::after {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
         }
 
         .cta-button:hover {
@@ -203,19 +286,114 @@
         }
 
         .pricing-card {
-            background-color: rgba(20, 20, 20, 0.8);
-            border-radius: 10px;
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
             padding: 2rem;
             width: 300px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            border: 2px solid #ff88bb;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            animation: float 4s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 5px 15px rgba(255, 136, 187, 0.2),
+                0 0 30px rgba(255, 136, 187, 0.1),
+                inset 0 0 15px rgba(255, 136, 187, 0.1);
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,136,187,0.15), transparent 70%);
+            transform: rotate(0deg);
+            animation: cardGlow 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes cardGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .pricing-card:hover {
+            animation: none;
+            box-shadow: 0 0 30px rgba(255, 136, 187, 0.3);
             transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(255, 136, 187, 0.2);
         }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 136, 187, 0.2), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            border-radius: inherit;
+        }
+
+        .pricing-card:hover::before {
+            opacity: 1;
+        }
+
+        .nav-links a {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: -100%;
+            background: linear-gradient(90deg, transparent, #ff88bb, transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .cta-button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            transform: translate(-100%, -100%) rotate(45deg);
+            transition: all 0.6s;
+        }
+
+        .cta-button:hover::after {
+            transform: translate(0, 0) rotate(45deg);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
 
         .card-icon {
             margin-bottom: 1rem;
@@ -327,6 +505,13 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-logo">
+            <span style="color: white;">phantom</span><span style="color: #ff88bb;">.cc</span>
+        </div>
+    </div>
+
     <!-- Particle Background -->
     <div id="tsparticles"></div>
 
@@ -356,12 +541,15 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero-section">
+        <div style="background: rgba(0, 0, 0, 0.4); padding: 8px 16px; border-radius: 50px; margin-bottom: 24px; border: 2px solid rgba(255, 255, 255, 0.5); box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.1);">
+            <span style="color: #cccccc; font-size: 0.9rem; letter-spacing: 1px;">TRUSTED BY 350+ USERS</span>
+        </div>
         <h1 class="hero-title">
             <span class="typewriter" id="typewriter"></span>
             <span class="typewriter-cursor"></span>
         </h1>
         <div class="cta-container">
-            <a href="https://discord.gg/aGeUHStfKq" target="_blank" class="cta-button">
+            <a href="https://discord.gg/phantomcc" target="_blank" class="cta-button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="download-icon">
                     <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
                 </svg>
@@ -398,17 +586,23 @@
     <section id="features" class="pricing-section" style="padding-bottom: 0;">
         <h2 class="pricing-title">Features</h2>
         <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 2rem;">
-            <div style="background-color: rgba(20, 20, 20, 0.8); padding: 2rem; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1);">
-                <ul style="list-style: none; text-align: left; font-size: 1.2rem; color: #cccccc;">
-                    <li style="margin-bottom: 1rem;">[+] Triggerbot</li>
-                    <li style="margin-bottom: 1rem;">[+] SilentAim</li>
-                    <li style="margin-bottom: 1rem;">[+] WalkSpeed</li>
-                    <li style="margin-bottom: 1rem;">[+] Cframe</li>
-                    <li style="margin-bottom: 1rem;">[+] SnapLine</li>
-                    <li style="margin-bottom: 1rem;">[+] Jump Lock</li>
-                    <li style="margin-bottom: 1rem;">[+] KnockCheck</li>
-                    <li style="margin-bottom: 1rem;">[+] Aimbot</li>
-                    <li style="margin-bottom: 1rem;">[+] Esp (tracers chams skeleton etc)</li>
+            <div class="pricing-card" style="width: 100%; max-width: 400px;">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#ff88bb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h3>Features</h3>
+                <ul style="text-align: left; font-size: 1.1rem; margin: 2rem 0;">
+                    <li style="margin-bottom: 1rem; color: #cccccc;">[+] Triggerbot</li>
+                    <li style="margin-bottom: 1rem; color: #cccccc;">[+] SilentAim</li>
+                    <li style="margin-bottom: 1rem; color: #cccccc;">[+] WalkSpeed</li>
+                    <li style="margin-bottom: 1rem; color: #cccccc;">[+] Cframe</li>
+                    <li style="margin-bottom: 1rem; color: #cccccc;">[+] SnapLine</li>
+                    <li style="margin-bottom: 1rem; color: #cccccc;">[+] Jump Lock</li>
+                    <li style="margin-bottom: 1rem; color: #cccccc;">[+] KnockCheck</li>
+                    <li style="margin-bottom: 1rem; color: #cccccc;">[+] Velocity</li>
+                    <li style="margin-bottom: 1rem; color: #cccccc;">[+] Esp (tracers chams skeleton etc)</li>
                 </ul>
             </div>
             <button id="espPreviewBtn" class="cta-button" style="background: linear-gradient(45deg, #ff88bb, #ff99cc); position: relative; overflow: hidden; margin-bottom: 1rem;">
@@ -427,7 +621,7 @@
         <div class="modal-content" style="background: rgba(20, 20, 20, 0.95); padding: 1.5rem; border-radius: 15px; position: relative; max-width: 400px; width: 50%; border: 1px solid #ff88bb; box-shadow: 0 0 30px rgba(255, 136, 187, 0.3);">
             <span class="close-modal" style="position: absolute; right: 20px; top: 20px; color: #fff; font-size: 24px; cursor: pointer;">&times;</span>
             <h3 style="color: #ff88bb; margin-bottom: 1rem; font-size: 1.5rem;">ESP Preview</h3>
-            <img src="https://media-hosting.imagekit.io/19ecbf3a4d0d4bec/loc%20(online-video-cutter.com)%20(1).mp4?Expires=1837783256&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=L4RubPrcUfm58fi9N20guolqano2d7nWVti55H5xprq0xJeY2uZI0~AzmYFN3hqTAzV6R4-NZNpdHcPJj17uERLDLuK~~LeHNQqVKaCDfbmbEDBq26tUlGcfux5Xs0ze~2eef6BMAN8YeSwhj3qeXi1zXcJUYKTniR-c90aMkzw9lGkUQikzTAUO9b-dH8fT5GwkT4SANAFIfO8jEzQXbY1cKnvjhh0sSpn8oOyUiEcTFvcECl4WvIW4AbVLGoZMg0c3DBZcwvL-otCCap7kSSi2sOCGZP4QS8YU7DfmeRMoyO-yBnkW~kWBti2nEC8irI~lQGgjXJsDiImW2U8BjA__" alt="ESP Preview" style="width: 100%; border-radius: 10px; box-shadow: 0 0 20px rgba(255, 136, 187, 0.2);">
+            <img src="https://iili.io/3TDALox.png" alt="ESP Preview" style="width: 100%; border-radius: 10px; box-shadow: 0 0 20px rgba(255, 136, 187, 0.2);">
         </div>
     </div>
 
@@ -471,7 +665,7 @@
         <div class="modal-content" style="background: rgba(20, 20, 20, 0.95); padding: 1.5rem; border-radius: 15px; position: relative; max-width: 400px; width: 50%; border: 1px solid #ff88bb; box-shadow: 0 0 30px rgba(255, 136, 187, 0.3);">
             <span class="close-modal-aimbot" style="position: absolute; right: 20px; top: 20px; color: #fff; font-size: 24px; cursor: pointer;">&times;</span>
             <h3 style="color: #ff88bb; margin-bottom: 1rem; font-size: 1.5rem;">Aimbot Preview</h3>
-            <img src="https://s4.ezgif.com/tmp/ezgif-47896b81e820f6.gif" alt="Aimbot Preview" style="width: 100%; border-radius: 10px; box-shadow: 0 0 20px rgba(255, 136, 187, 0.2);">
+            <img src="https://iili.io/3TDALox.png" alt="Aimbot Preview" style="width: 100%; border-radius: 10px; box-shadow: 0 0 20px rgba(255, 136, 187, 0.2);">
         </div>
     </div>
 
@@ -535,7 +729,7 @@
                     <li>Litecoin (LTC)</li>
                     <li>Monero (XMR)</li>
                 </ul>
-                <a href="https://discord.gg/aGeUHStfKq" target="_blank" class="cta-button">Buy Now</a>
+                <a href="https://discord.gg/phantomcc" target="_blank" class="cta-button">Buy Now</a>
             </div>
             <div class="pricing-card">
                 <div class="card-icon">
@@ -554,7 +748,7 @@
                     <li>Easy checkout</li>
                     <li>Buyer protection</li>
                 </ul>
-                <a href="https://discord.gg/aGeUHStfKq" target="_blank" class="cta-button">Buy Now</a>
+                <a href="https://discord.gg/phantomcc" target="_blank" class="cta-button">Buy Now</a>
             </div>
             <div class="pricing-card">
                 <div class="card-icon">
@@ -569,11 +763,10 @@
                 <div class="price">$5</div>
                 <ul>
                     <li>Rare skins accepted</li>
-                    <li>Fair value assessment</li>
-                    <li>Quick trades</li>
+                    <li>Fair value assessment</li><li>Quick trades</li>
                     <li>Trusted exchange</li>
                 </ul>
-                <a href="https://discord.gg/aGeUHStfKq" target="_blank" class="cta-button">Buy Now</a>
+                <a href="https://discord.gg/phantomcc" target="_blank" class="cta-button">Buy Now</a>
             </div>
         </div>
     </section>
@@ -614,7 +807,47 @@
         <p>© 2025 phantom.cc - All Rights Reserved</p>
     </footer>
 
+    <script src="https://unpkg.com/scrollreveal"></script>
     <script>
+        // Loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.loading-screen').classList.add('fade-out');
+            }, 1500);
+        });
+
+        // Initialize scroll reveal
+        const sr = ScrollReveal({
+            duration: 1000,
+            distance: '60px',
+            easing: 'cubic-bezier(0.5, 0, 0, 1)'
+        });
+
+        sr.reveal('.hero-section > *', {
+            origin: 'bottom',
+            interval: 200
+        });
+
+        sr.reveal('.pricing-card', {
+            origin: 'bottom',
+            interval: 200,
+            scale: 0.9,
+            reset: true
+        });
+
+        sr.reveal('.stat-card', {
+            origin: 'left',
+            interval: 200,
+            distance: '100px',
+            duration: 1500
+        });
+
+        sr.reveal('.pricing-title', {
+            origin: 'top',
+            distance: '40px',
+            duration: 1200
+        });
+
         // Initialize particle background
         document.addEventListener('DOMContentLoaded', function() {
             tsParticles.load("tsparticles", {
@@ -769,16 +1002,16 @@
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     const targetId = link.getAttribute('href').substring(1);
-                    
+
                     // Update active states
                     navLinks.forEach(l => l.classList.remove('active'));
                     link.classList.add('active');
-                    
+
                     // Smooth scroll
                     document.getElementById(targetId).scrollIntoView({ 
                         behavior: 'smooth'
                     });
-                    
+
                     // Activate section
                     activateSection(targetId);
                 });
@@ -801,21 +1034,21 @@
                         link.classList.add('active');
                     }
                 });
-                
+
                 activateSection(current);
             });
 
             // Statistics animation
             function animateStats() {
                 const stats = document.querySelectorAll('.stat-number');
-                
+
                 stats.forEach(stat => {
                     const target = parseInt(stat.getAttribute('data-target'));
                     const duration = 2000; // 2 seconds
                     const steps = 50;
                     const increment = target / steps;
                     let current = 0;
-                    
+
                     const updateCount = () => {
                         current += increment;
                         if(current < target) {
@@ -825,7 +1058,7 @@
                             stat.textContent = target;
                         }
                     };
-                    
+
                     updateCount();
                 });
             }
@@ -843,6 +1076,171 @@
             const statsSection = document.querySelector('.stat-card').parentElement;
             observer.observe(statsSection);
         });
+    </script>
+    <script>
+        const pricingCards = document.querySelectorAll('.pricing-card');
+
+        pricingCards.forEach(card => {
+            let isHovering = false;
+            let rafId = null;
+            let targetX = 0;
+            let targetY = 0;
+            let currentX = 0;
+            let currentY = 0;
+            let glowX = 0;
+            let glowY = 0;
+            const interpolationFactor = 0.1;
+            const maxTilt = 25;
+            const glowStrength = 2.5;
+
+            function lerp(start, end, factor) {
+                return start + (end - start) * factor;
+            }
+
+            // Create glow effect
+            const glowEffect = document.createElement('div');
+            glowEffect.className = 'card-glow';
+            glowEffect.style.cssText = `
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -50%;
+                left: -50%;
+                background: radial-gradient(circle at center, rgba(255,136,187,0.3) 0%, transparent 70%);
+                pointer-events: none;
+                opacity: 0;
+                transition: opacity 0.3s;
+                mix-blend-mode: screen;
+            `;
+            card.style.position = 'relative';
+            card.style.overflow = 'hidden';
+            card.appendChild(glowEffect);
+
+            function updateTransform() {
+                if (!isHovering && Math.abs(currentX) < 0.001 && Math.abs(currentY) < 0.001) {
+                    currentX = 0;
+                    currentY = 0;
+                    glowEffect.style.opacity = '0';
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                    return;
+                }
+
+                const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+                const easeOutElastic = (t) => {
+                    const p = 0.3;
+                    return Math.pow(2, -10 * t) * Math.sin((t - p / 4) * (2 * Math.PI) / p) + 1;
+                };
+                
+                const enterProgress = isHovering ? easeOutElastic(interpolationFactor * 5) : easeOutCubic(interpolationFactor * 2);
+                const moveProgress = isHovering ? 0.15 : 0.08;
+
+                currentX = lerp(currentX, isHovering ? targetX : 0, moveProgress);
+                currentY = lerp(currentY, isHovering ? targetY : 0, moveProgress);
+
+                glowX = lerp(glowX, isHovering ? targetX : 0, moveProgress * 0.7);
+                glowY = lerp(glowY, isHovering ? targetY : 0, moveProgress * 0.7);
+
+                const rotationX = currentY * maxTilt * enterProgress;
+                const rotationY = currentX * maxTilt * enterProgress;
+                const scale = isHovering ? 1 + (0.05 * enterProgress) : 1;
+                const translateZ = isHovering ? `${20 * enterProgress}px` : '0px';
+
+                card.style.transform = `
+                    perspective(1000px) 
+                    rotateX(${rotationX}deg) 
+                    rotateY(${rotationY}deg) 
+                    scale3d(${scale}, ${scale}, ${scale})
+                    translateZ(${translateZ})
+                `;
+
+                // Update glow position and intensity
+                if (isHovering) {
+                    glowEffect.style.opacity = '1';
+                    glowEffect.style.transform = `
+                        translate(${glowX * 50}%, ${glowY * 50}%) 
+                        scale(${1 + Math.abs(glowX * glowY) * 0.2})
+                    `;
+                }
+
+                // Add dynamic shadow based on tilt
+                card.style.boxShadow = `
+                    ${-rotationY * 2}px ${-rotationX * 2}px 20px rgba(255,136,187,0.2),
+                    0 10px 30px rgba(255,136,187,0.3)
+                `;
+
+                rafId = requestAnimationFrame(updateTransform);
+            }
+
+            function handleMouseMove(e) {
+                const rect = card.getBoundingClientRect();
+                targetX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                targetY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+                
+                if (!rafId) updateTransform();
+            }
+
+            card.addEventListener('mouseenter', () => {
+                isHovering = true;
+                card.style.transition = 'none';
+                if (!rafId) updateTransform();
+                
+                // Add subtle particle effect on hover
+                const particle = document.createElement('div');
+                particle.className = 'hover-particle';
+                particle.style.cssText = `
+                    position: absolute;
+                    width: 8px;
+                    height: 8px;
+                    background: rgba(255,136,187,0.6);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    animation: particleFade 1s ease-out forwards;
+                `;
+                card.appendChild(particle);
+                setTimeout(() => particle.remove(), 1000);
+            });
+
+            card.addEventListener('mousemove', handleMouseMove);
+
+            card.addEventListener('mouseleave', () => {
+                isHovering = false;
+                card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+                if (!rafId) updateTransform();
+            });
+
+            // Add touch support for mobile
+            card.addEventListener('touchstart', (e) => {
+                isHovering = true;
+                handleMouseMove(e.touches[0]);
+            });
+
+            card.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                handleMouseMove(e.touches[0]);
+            });
+
+            card.addEventListener('touchend', () => {
+                isHovering = false;
+                if (!rafId) updateTransform();
+            });
+        });
+
+        // Add keyframe animation for particles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleFade {
+                0% {
+                    transform: scale(0) translate(0, 0);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(2) translate(50px, -50px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
